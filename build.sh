@@ -30,7 +30,7 @@ layer_info=$?
 
 if [ $layer_info -ne 0 ];then
 	echo "Adding meta-oe layer"
-	bitbake-layers add-layer ../meta-oe
+	bitbake-layers add-layer ../meta-openembedded/meta-oe
 else
 	echo "meta-oe layer already exists"
 fi
