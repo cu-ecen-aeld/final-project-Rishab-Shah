@@ -24,7 +24,7 @@ cat conf/local.conf | grep "${DISTRO_F}" > /dev/null
 local_distro_info=$?
 
 # Add firmware aupport
-IMAGE_ADD="IMAGE_INSTALL_append = \"linux-firmware-rpidistro-bcm43430 v4l-utils python3 ntp wpa-supplicant libgpiod libgpiod-tools\""
+IMAGE_ADD="IMAGE_INSTALL_append = \"linux-firmware-rpidistro-bcm43430 v4l-utils python3 ntp wpa-supplicant libgpiod libgpiod-tools libgpiod-dev\""
 cat conf/local.conf | grep "${IMAGE_ADD}" > /dev/null
 local_imgadd_info=$?
 
@@ -113,6 +113,15 @@ else
         echo "meta-raspberrypi layer already exists"
 fi
 
+bitbake-layers show-layers | grep "meta-aesd" > /dev/null
+layer_info=$?
+
+if [ $layer_info -ne 0 ];then
+        echo "Adding meta-aesd layer"
+        bitbake-layers add-layer ../meta-aesd
+else
+        echo "meta-aesd layer already exists"
+fi
 ############################################################################
 set -e
 bitbake core-image-base
