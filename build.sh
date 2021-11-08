@@ -38,6 +38,16 @@ CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"aesd-assignments\""
 cat conf/local.conf | grep "${CORE_IM_ADD}" > /dev/null
 local_coreimadd_info=$?
 
+# Add I2C support
+MODULE_I2C="ENABLE_I2C = \"1\""
+cat conf/local.conf | grep "${MODULE_I2C}" > /dev/null
+local_i2c_info=$?
+
+# Autoload I2C_MODULE
+AUTOLOAD_I2C="KERNEL_MODULE_AUTOLOAD:rpi += \"i2c-dev i2c-bcm2708\""
+cat conf/local.conf | grep "${AUTOLOAD_I2C}" > /dev/null
+local_i2c_autoload_info=$?
+
 ##########################################################################
 # Add if the support is missing in the local.conf file
 ##########################################################################
@@ -80,6 +90,22 @@ if [ $local_coreimadd_info -ne 0 ];then
         
 else
         echo "${CORE_IM_ADD} already exists in the local.conf file"
+fi
+
+if [ $local_i2c_info -ne 0 ];then
+        echo "Adding  ${MODULE_I2C} in the local.conf file"
+        echo ${MODULE_I2C} >> conf/local.conf
+
+else
+        echo "${MODULE_I2C} already exists in the local.conf file"
+fi
+
+if [ $local_i2c_autoload_info -ne 0 ];then
+        echo "Adding  ${AUTOLOAD_I2C} in the local.conf file"
+        echo ${AUTOLOAD_I2C} >> conf/local.conf
+
+else
+        echo "${AUTOLOAD_I2C} already exists in the local.conf file"
 fi
 
 ###########################################################################
@@ -135,6 +161,7 @@ if [ $layer_info -ne 0 ];then
 else
         echo "meta-aesd layer already exists"
 fi
+
 ############################################################################
 set -e
 bitbake core-image-base
