@@ -34,7 +34,7 @@ cat conf/local.conf | grep "${IMAGE_F}" > /dev/null
 local_imgf_info=$?
 
 # Add aesd-assignments package
-CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"aesd-assignments\""
+CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"aesd-assignments i2c-config\""
 cat conf/local.conf | grep "${CORE_IM_ADD}" > /dev/null
 local_coreimadd_info=$?
 
@@ -47,6 +47,7 @@ local_i2c_info=$?
 AUTOLOAD_I2C="KERNEL_MODULE_AUTOLOAD:rpi += \"i2c-dev i2c-bcm2708\""
 cat conf/local.conf | grep "${AUTOLOAD_I2C}" > /dev/null
 local_i2c_autoload_info=$?
+
 
 ##########################################################################
 # Add if the support is missing in the local.conf file
@@ -161,6 +162,17 @@ if [ $layer_info -ne 0 ];then
 else
         echo "meta-aesd layer already exists"
 fi
+
+bitbake-layers show-layers | grep "meta-i2c" > /dev/null
+layer_info=$?
+
+if [ $layer_info -ne 0 ];then
+        echo "Adding meta-i2c layer"
+        bitbake-layers add-layer ../meta-i2c
+else
+        echo "meta-i2c layer already exists"
+fi
+
 
 ############################################################################
 set -e

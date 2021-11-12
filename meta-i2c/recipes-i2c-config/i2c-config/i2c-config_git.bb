@@ -8,14 +8,14 @@ SRC_URI = "git://git@github.com/cu-ecen-aeld/final-project-DhruvHMehta.git;proto
 
 PV = "1.0+git${SRCPV}"
 # TODO: set to reference a specific commit hash in your assignment repo
-SRCREV = "81fec4818590368f1d35deb2bdffcf0fefc3128d"
+SRCREV = "0046812cf22ec2b66d12325a122e1e43a680b8fb"
 
 # This sets your staging directory based on WORKDIR, where WORKDIR is defined at 
 # https://www.yoctoproject.org/docs/latest/ref-manual/ref-manual.html#var-WORKDIR
 # We reference the "server" directory here to build from the "server" directory
 # in your assignments repo
 S = "${WORKDIR}/git"
-B = "${S}/i2c-package"
+B = "${S}/i2c_package"
 
 # TODO: Add the aesdsocket application and any other files you need to install
 # See http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/conf/bitbake.conf?h=warrior for yocto path prefixes
