@@ -34,7 +34,8 @@ cat conf/local.conf | grep "${IMAGE_F}" > /dev/null
 local_imgf_info=$?
 
 # Add aesd-assignments package
-CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"aesd-assignments i2c-config\""
+#CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"aesd-assignments i2c-config gpio-config\""
+CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config\""
 cat conf/local.conf | grep "${CORE_IM_ADD}" > /dev/null
 local_coreimadd_info=$?
 
@@ -94,7 +95,7 @@ else
 fi
 
 if [ $local_i2c_info -ne 0 ];then
-        echo "Adding  ${MODULE_I2C} in the local.conf file"
+        echo "Append  ${MODULE_I2C} in the local.conf file"
         echo ${MODULE_I2C} >> conf/local.conf
 
 else
@@ -102,7 +103,7 @@ else
 fi
 
 if [ $local_i2c_autoload_info -ne 0 ];then
-        echo "Adding  ${AUTOLOAD_I2C} in the local.conf file"
+        echo "Append  ${AUTOLOAD_I2C} in the local.conf file"
         echo ${AUTOLOAD_I2C} >> conf/local.conf
 
 else
@@ -153,15 +154,15 @@ else
         echo "meta-raspberrypi layer already exists"
 fi
 
-bitbake-layers show-layers | grep "meta-aesd" > /dev/null
-layer_info=$?
+#bitbake-layers show-layers | grep "meta-aesd" > /dev/null
+#layer_info=$?
 
-if [ $layer_info -ne 0 ];then
-        echo "Adding meta-aesd layer"
-        bitbake-layers add-layer ../meta-aesd
-else
-        echo "meta-aesd layer already exists"
-fi
+#if [ $layer_info -ne 0 ];then
+#        echo "Adding meta-aesd layer"
+#        bitbake-layers add-layer ../meta-aesd
+#else
+#        echo "meta-aesd layer already exists"
+#fi
 
 bitbake-layers show-layers | grep "meta-i2c" > /dev/null
 layer_info=$?
@@ -173,6 +174,15 @@ else
         echo "meta-i2c layer already exists"
 fi
 
+bitbake-layers show-layers | grep "meta-gpio" > /dev/null
+layer_info=$?
+
+if [ $layer_info -ne 0 ];then
+        echo "Adding meta-gpio layer"
+        bitbake-layers add-layer ../meta-gpio
+else
+        echo "meta-gpio layer already exists"
+fi
 
 ############################################################################
 set -e
