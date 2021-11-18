@@ -34,7 +34,7 @@ cat conf/local.conf | grep "${IMAGE_F}" > /dev/null
 local_imgf_info=$?
 
 # Add aesd-assignments package
-CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config\""
+CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config client-config\""
 cat conf/local.conf | grep "${CORE_IM_ADD}" > /dev/null
 local_coreimadd_info=$?
 
@@ -57,7 +57,6 @@ if [ $local_conf_info -ne 0 ];then
 else
 	echo "${CONFLINE} already exists in the local.conf file"
 fi
-
 
 if [ $local_distro_info -ne 0 ];then
         echo "Append ${DISTRO_F} in the local.conf file"
@@ -175,6 +174,15 @@ fi
 #        echo "meta-server layer already exists"
 #fi
 
+bitbake-layers show-layers | grep "meta-client" > /dev/null
+layer_info=$?
+
+if [ $layer_info -ne 0 ];then
+        echo "Adding meta-client layer"
+        bitbake-layers add-layer ../meta-client
+else
+        echo "meta-client layer already exists"
+fi
 
 ############################################################################
 set -e
