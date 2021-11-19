@@ -34,7 +34,7 @@ cat conf/local.conf | grep "${IMAGE_F}" > /dev/null
 local_imgf_info=$?
 
 # Add aesd-assignments package
-CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config client-config\""
+CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config client-config server-config\""
 cat conf/local.conf | grep "${CORE_IM_ADD}" > /dev/null
 local_coreimadd_info=$?
 
@@ -164,15 +164,15 @@ else
         echo "meta-gpio layer already exists"
 fi
 
-#bitbake-layers show-layers | grep "meta-server" > /dev/null
-#layer_info=$?
+bitbake-layers show-layers | grep "meta-server" > /dev/null
+layer_info=$?
 
-#if [ $layer_info -ne 0 ];then
-#        echo "Adding meta-server layer"
-#        bitbake-layers add-layer ../meta-server
-#else
-#        echo "meta-server layer already exists"
-#fi
+if [ $layer_info -ne 0 ];then
+        echo "Adding meta-server layer"
+        bitbake-layers add-layer ../meta-server
+else
+        echo "meta-server layer already exists"
+fi
 
 bitbake-layers show-layers | grep "meta-client" > /dev/null
 layer_info=$?

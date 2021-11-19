@@ -15,15 +15,15 @@ SRCREV = "${AUTOREV}"
 # We reference the "server" directory here to build from the "server" directory
 # in your assignments repo
 S = "${WORKDIR}/git"
-B = "${S}/gpio"
+B = "${S}/IPC"
 # TODO: Add the aesdsocket application and any other files you need to install
 # See http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/conf/bitbake.conf?h=warrior for yocto path prefixes
-FILES_${PN} += "${bindir}/gpioreadtest"
-FILES_${PN} += "${bindir}/gpiowritetest"
-FILES_${PN} += "${bindir}/ultrasonictest"
+FILES_${PN} += "${bindir}/mq_send"
+FILES_${PN} += "${bindir}/mq_receive"
+FILES_${PN} += "${bindir}/npipe_send"
+FILES_${PN} += "${bindir}/npipe_receive"
 # TODO: customize these as necessary for any libraries you need for your application
-DEPENDS = "libgpiod"
-TARGET_LDFLAGS += "-lgpiod"
+TARGET_LDFLAGS += "-lrt"
 
 do_configure () {
 	:
@@ -42,9 +42,8 @@ do_install () {
 	# https://www.yoctoproject.org/docs/latest/ref-manual/ref-manual.html#var-S
 	# See example at https://github.com/cu-ecen-aeld/ecen5013-yocto/blob/ecen5013-hello-world/meta-ecen5013/recipes-ecen5013/ecen5013-hello-world/ecen5013-hello-world_git.bb
 	install -d ${D}${bindir}
-	install -m 0755 ${B}/gpioreadtest ${D}${bindir}/
-	install -m 0755 ${B}/gpiowritetest ${D}${bindir}/
-	install -m 0755 ${B}/ultrasonictest ${D}${bindir}/
-	#install -d ${D}${sysconfdir}
-	#install -m 0755 ${S}/wifi_config/wpa_supplicant.conf ${D}${sysconfdir}/wpa_supplicant.conf
+	install -m 0755 ${B}/mq_send ${D}${bindir}/
+	install -m 0755 ${B}/mq_receive ${D}${bindir}/
+	install -m 0755 ${B}/npipe_send ${D}${bindir}/
+	install -m 0755 ${B}/npipe_receive ${D}${bindir}/
 }
