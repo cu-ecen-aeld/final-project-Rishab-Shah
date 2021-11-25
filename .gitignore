@@ -2,4 +2,4 @@ build
 .vscode
 valgrind-out.txt
 test.sh.log
-**/wpa_supplicant.conf
+meta-wifi/recipes-wifi-init-configuration/wifi-init-configuration/files/wpa_supplicant.conf
