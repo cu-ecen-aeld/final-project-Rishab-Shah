@@ -5,7 +5,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 # TODO: Set this  with the path to your assignments rep.  Use ssh protocol and see lecture notes
 # about how to setup ssh-agent for passwordless access
 #SRC_URI = "git://git@github.com/cu-ecen-aeld/final-project-DhruvHMehta.git;protocol=ssh;branch=master"
-SRC_URI = "file://wpa_supplicant.conf"
+SRC_URI = "file://wpa_supplicant.conf \
+	   file://wifi_bootupscript.sh "
 #PV = "1.0+git${SRCPV}"
 # TODO: set to reference a specific commit hash in your assignment repo
 #SRCREV = "${AUTOREV}"
@@ -18,8 +19,11 @@ SRC_URI = "file://wpa_supplicant.conf"
 #B = "${S}/wifi_config"
 # TODO: Add the aesdsocket application and any other files you need to install
 # See http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/conf/bitbake.conf?h=warrior for yocto path prefixes
-
-
+# Adding init script configurations
+# these 3 lines will have the script run on boot
+inherit update-rc.d
+INITSCRIPT_PACKAGES = "${PN}"
+INITSCRIPT_NAME = "wifi_bootupscript.sh"
 
 #https://git.yoctoproject.org/poky/plain/meta/conf/bitbake.conf?h=blinky
 
@@ -36,11 +40,18 @@ do_install () {
 	#http://embeddedguruji.blogspot.com/2019/02/yocto-recipe-to-copy-single-file-on.html
 	#To figure out WORKDIR meaning
 	#https://www.openembedded.org/pipermail/openembedded-core/2015-February/101990.html
-	install -d ${D}${datadir}/custom
-	install -m 0755 ${WORKDIR}/wpa_supplicant.conf ${D}${datadir}/custom/wpa_supplicant.conf
+	install -d ${D}${datadir}/wifi_custom
+	install -m 0755 ${WORKDIR}/wpa_supplicant.conf ${D}${datadir}/wifi_custom/wpa_supplicant.conf
+
+	#boot up script
+	#https://www.yoctoproject.org/pipermail/yocto/2018-March/040185.html
+	install -d ${D}${INIT_D_DIR}
+	install -m 0755 ${WORKDIR}/wifi_bootupscript.sh ${D}${INIT_D_DIR}/wifi_bootupscript.sh
 
 }
 
 
-FILES_${PN} += "${datadir}/custom/wpa_supplicant.conf"
+FILES_${PN} += "${datadir}/wifi_custom/wpa_supplicant.conf"
+FILES_${PN} += "${INIT_D_DIR}/wifi_bootupscript.sh"
 
+#EOF
