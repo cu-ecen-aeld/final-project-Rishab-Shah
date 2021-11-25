@@ -34,7 +34,8 @@ cat conf/local.conf | grep "${IMAGE_F}" > /dev/null
 local_imgf_info=$?
 
 # Add aesd-assignments package
-CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config client-config server-config\""
+#CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config client-config server-config\""
+CORE_IM_ADD="CORE_IMAGE_EXTRA_INSTALL += \"i2c-config gpio-config client-config server-config wifi-init-configuration\""
 cat conf/local.conf | grep "${CORE_IM_ADD}" > /dev/null
 local_coreimadd_info=$?
 
@@ -182,6 +183,16 @@ if [ $layer_info -ne 0 ];then
         bitbake-layers add-layer ../meta-client
 else
         echo "meta-client layer already exists"
+fi
+
+bitbake-layers show-layers | grep "meta-wifi" > /dev/null
+layer_info=$?
+
+if [ $layer_info -ne 0 ];then
+        echo "Adding meta-wifi layer"
+        bitbake-layers add-layer ../meta-wifi
+else
+        echo "meta-wifi layer already exists"
 fi
 
 ############################################################################
