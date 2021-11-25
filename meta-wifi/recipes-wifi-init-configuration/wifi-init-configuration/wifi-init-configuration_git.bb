@@ -18,19 +18,20 @@ S = "${WORKDIR}/git"
 B = "${S}/wifi_config"
 # TODO: Add the aesdsocket application and any other files you need to install
 # See http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/conf/bitbake.conf?h=warrior for yocto path prefixes
-FILES_${PN} += "${sysconfdir}/wpa_supplicant.conf"
-# TODO: customize these as necessary for any libraries you need for your application
 
 
-#do_configure () {
-#	:
-#}
 
-#do_compile () {
-#	oe_runmake
-#}
+#https://git.yoctoproject.org/poky/plain/meta/conf/bitbake.conf?h=blinky
 
 do_install () {
-	install -d ${D}${sysconfdir}
-	install -m 0755 ${B}/wpa_supplicant.conf ${D}${sysconfdir}/wpa_supplicant.conf
+	# Same location access error
+	#install -d ${D}${sysconfdir}
+	#install -m 0755 ${B}/wpa_supplicant.conf ${D}${sysconfdir}/wpa_supplicant.conf
+	
+	#attempt for different location
+	install -d ${D}${datadir}/custom
+	install -m 0755 ${B}/wpa_supplicant.conf ${D}${datadir}/custom/wpa_supplicant.conf
 }
+
+
+FILES_${PN} += "${datadir}/custom/wpa_supplicant.conf"
