@@ -8,6 +8,9 @@
 # Architecture independent paths
 # export datadir = "${prefix}/share"
 
+# Shutting down the wifi service
+ifdown wlan0
+
 # Copying files to relevant location from tem location
 cp /usr/share/wifi_custom/wpa_supplicant.conf /etc/wpa_supplicant.conf
 
